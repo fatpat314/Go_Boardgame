@@ -7,6 +7,8 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/hajimehoshi/ebiten/inpututil"
+	// "github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 var square *ebiten.Image
@@ -24,18 +26,7 @@ var screenHeight = len(board[0]) * int(h)
 // var screenHeight = 420 - 13
 var n = 0
 
-// type _piece struct {
-// 	X, Y  int
-// 	Owner int
-// }
-
-// type _board struct {
-// 	Grid [19][19]*_piece
-// }
-
-// func Board_init() *_board {
-// 	return &_board{}
-// }
+var playerOneTurn = true
 
 func PopulateNewBoard() {
 	board = [19][19]int{
@@ -69,6 +60,7 @@ func BoardAsString() string {
 	pieces := map[int]string{
 		0: "0",
 		1: "1",
+		2: "2",
 	}
 	boardString := ""
 	for i := 0; i < 19; i++ {
@@ -86,6 +78,16 @@ func BoardAsString() string {
 	return boardString
 }
 
+func playerTurn() int {
+	if playerOneTurn == true {
+		playerOneTurn = false
+		return 1
+	} else {
+		playerOneTurn = true
+		return 2
+	}
+}
+
 func update(screen *ebiten.Image) error {
 	screen.Fill(color.NRGBA{0xff, 0x00, 0x00, 0xff})
 	ebitenutil.DebugPrint(screen, "Our first game in Ebiten!")
@@ -96,7 +98,9 @@ func update(screen *ebiten.Image) error {
 	for i := float64(0); i < float64(screenWidth); i += w {
 		for j := float64(0); j < float64(screenHeight); j += h {
 			if board[int(i/w)][int(j/h)] == 1 {
-				square.Fill(color.Black)
+				square.Fill(color.NRGBA{0xff, 0x00, 0x00, 0xff})
+			} else if board[int(i/w)][int(j/h)] == 2 {
+				square.Fill(color.NRGBA{0x00, 0x00, 0xff, 0xff})
 			} else {
 				square.Fill(color.White)
 			}
@@ -104,9 +108,8 @@ func update(screen *ebiten.Image) error {
 			ebitenutil.DebugPrint(screen, fmt.Sprintf("X: %d, Y: %d", x, y))
 			if x/int(w) == int(i/w) {
 				if y/int(h) == int(j/h) {
-					if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-						square.Fill(color.Black)
-						board[int(i/w)][int(j/h)] = 1
+					if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+						board[int(i/w)][int(j/h)] = playerTurn()
 						PrintBoard()
 					}
 				}
