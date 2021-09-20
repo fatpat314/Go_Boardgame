@@ -15,8 +15,8 @@ var square *ebiten.Image
 
 var board [19][19]int
 
-var screenWidth = len(board) * 20
-var screenHeight = len(board[0]) * 20
+var screenWidth = len(board) * 10
+var screenHeight = len(board[0]) * 10
 
 // var screenWidth = 420 - 13
 // var screenHeight = 420 - 13
@@ -66,19 +66,17 @@ func PrintBoard() {
 func BoardAsString() string {
 	pieces := map[int]string{
 		0: "0",
+		1: "1",
 	}
 	boardString := ""
 	for i := 0; i < 19; i++ {
-		// if i < 10 {
 		boardString += strconv.Itoa(19 - i)
-		// }
 		for j := 0; j < 19; j++ {
 			if j == 0 && i < 10 {
 				boardString += "| " + pieces[board[i][j]]
 			} else {
 				boardString += " | " + pieces[board[i][j]]
 			}
-			// boardString += " | " + pieces[board[i][j]]
 		}
 		boardString += " |\n"
 	}
@@ -91,11 +89,26 @@ func update(screen *ebiten.Image) error {
 	ebitenutil.DebugPrint(screen, "Our first game in Ebiten!")
 
 	if square == nil {
-		square, _ = ebiten.NewImage(19, 19, ebiten.FilterNearest)
+		square, _ = ebiten.NewImage(10, 10, ebiten.FilterNearest)
 	}
-	for i := float64(0); i < float64(screenWidth); i += 20 {
-		for j := float64(0); j < float64(screenHeight); j += 20 {
-			square.Fill(color.White)
+	for i := float64(0); i < float64(screenWidth); i += 10 {
+		for j := float64(0); j < float64(screenHeight); j += 10 {
+			if board[int(i/10)][int(j/10)] == 1 {
+				square.Fill(color.Black)
+			} else {
+				square.Fill(color.White)
+			}
+			x, y := ebiten.CursorPosition()
+			ebitenutil.DebugPrint(screen, fmt.Sprintf("X: %d, Y: %d", x, y))
+			if int(x/10) == int(i/10) {
+				if int(y/10) == int(j/10) {
+					if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+						square.Fill(color.Black)
+						board[int(i/10)][int(j/10)] = 1
+						PrintBoard()
+					}
+				}
+			}
 			opts := &ebiten.DrawImageOptions{}
 			opts.GeoM.Translate(i, j)
 			screen.DrawImage(square, opts)
