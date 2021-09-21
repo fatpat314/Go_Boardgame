@@ -104,6 +104,12 @@ func update(screen *ebiten.Image) error {
 			} else {
 				square.Fill(color.White)
 			}
+			if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)][int(j/h)-1] == 2 && board[int(i/w)-1][int(j/h)] == 2 {
+				board[int(i/w)][int(j/h)] = 0
+			}
+			if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)][int(j/h)-1] == 1 && board[int(i/w)-1][int(j/h)] == 1 {
+				board[int(i/w)][int(j/h)] = 0
+			}
 			x, y := ebiten.CursorPosition()
 			ebitenutil.DebugPrint(screen, fmt.Sprintf("X: %d, Y: %d", x, y))
 			if x/int(w) == int(i/w) {
