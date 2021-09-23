@@ -87,16 +87,33 @@ func playerTurn() int {
 		return 2
 	}
 }
+func inSlice(a int, list []int) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
 
 func surrounded(board [19][19]int, i float64, j float64) int {
-	// if surrounded by friends, good
-	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+	var s []int
+	if inSlice(int(i), s) == false {
 		// if surrounded by friends, good
-		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
-			return 1
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 			// if surrounded by friends, good
-		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
-			return 0
+			if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+				return 1
+				// if surrounded by friends, good
+			} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+				return 0
+			} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 {
+				// fmt.Println("HI")
+				s = append(s, int(i), int(j))
+				print(s)
+				// return surrounded(board, i+1, j)
+
+			}
 		}
 	}
 	// if surrounded
