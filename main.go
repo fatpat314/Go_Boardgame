@@ -88,6 +88,30 @@ func playerTurn() int {
 	}
 }
 
+func surrounded(board [19][19]int, i float64, j float64) int {
+	// if surrounded by friends, good
+	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 1
+			// if surrounded by friends, good
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 0
+		}
+	}
+	// if surrounded
+	if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 2
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 0
+		}
+	}
+	return 3
+}
+
 func update(screen *ebiten.Image) error {
 	screen.Fill(color.NRGBA{0xff, 0x00, 0x00, 0xff})
 	ebitenutil.DebugPrint(screen, "Our first game in Ebiten!")
@@ -104,17 +128,32 @@ func update(screen *ebiten.Image) error {
 			} else {
 				square.Fill(color.White)
 			}
-			if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
-				if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
-					// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 1 && board[int(i/w)][int(j/h)+1] != 1 && board[int(i/w)-1][int(j/h)] != 1 && board[int(i/w)][int(j/h)-1] != 1 {
+			if surrounded(board, i, j) == 0 {
+				// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+				// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+				// 		board[int(i/w)][int(j/h)] = 1
+				// 	} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+				// 		board[int(i/w)][int(j/h)] = 0
+				// 	}
+				// }
+				board[int(i/w)][int(j/h)] = 0
+			} else if surrounded(board, i, j) == 1 {
+				board[int(i/w)][int(j/h)] = 1
+			} else if surrounded(board, i, j) == 2 {
+				board[int(i/w)][int(j/h)] = 2
+			} else if surrounded(board, i, j) == 3 {
+				if surrounded(board, i+1, j) == 1 {
 					board[int(i/w)][int(j/h)] = 1
-					fmt.Println("Surrounded")
-					// PrintBoard()
-					// }
-				} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
-					board[int(i/w)][int(j/h)] = 0
 				}
 			}
+			// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+			// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			// 		board[int(i/w)][int(j/h)] = 1
+			// 	} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			// 		board[int(i/w)][int(j/h)] = 0
+			// 	}
+			// }
+
 			// if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 			// 	if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 || board[int(i/w)][int(j/h)+1] == 1 || board[int(i/w)-1][int(j/h)] == 1 || board[int(i/w)][int(j/h)-1] == 1 {
 			// 		board[int(i/w)][int(j/h)] = 0
