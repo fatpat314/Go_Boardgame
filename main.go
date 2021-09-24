@@ -124,6 +124,9 @@ func surrounded(board [19][19]int, i float64, j float64) int {
 		return 1
 	}
 
+	var s [][]int
+	var visited [][]int
+
 	// if surrounded
 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 		// if surrounded by friends, good
@@ -132,19 +135,22 @@ func surrounded(board [19][19]int, i float64, j float64) int {
 			// if surrounded by enemies, bad
 		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
 			return 0
+			// if surrounded but touching a friend,...
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 || board[int(i/w)][int(j/h)+1] == 1 || board[int(i/w)-1][int(j/h)] == 1 || board[int(i/w)][int(j/h)-1] == 1 {
+			// 	fmt.Println("HI")
+			var m []int
+			var v []int
+			v = append(v, int(i/w), int(j/h))
+			visited = append(visited, v)
+
+			s = append(s, m)
+			fmt.Println(s)
+			// 	board[int(i/w)][int(j/h)] = 2
+			// 	return surrounded(board, i+1, j)
+			// 	// PrintBoard()
+
+			// 	// return surrounded(board, i+1, j)
 		}
-		// if surrounded but touching a friend,...
-		// } else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 { //|| board[int(i/w)][int(j/h)+1] == 1 || board[int(i/w)-1][int(j/h)] == 1 || board[int(i/w)][int(j/h)-1] == 1 {
-		// 	fmt.Println("HI")
-		// 	// s = append(s, int(i), int(j))
-		// 	// print(s[0])
-		// 	board[int(i/w)][int(j/h)] = 2
-		// 	return surrounded(board, i+1, j)
-		// 	// PrintBoard()
-
-		// 	// return surrounded(board, i+1, j)
-
-		// }
 	}
 	// }
 	// """Edge case for index i Overflow player 2"""
