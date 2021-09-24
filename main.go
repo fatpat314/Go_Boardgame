@@ -29,27 +29,7 @@ var n = 0
 var playerOneTurn = true
 
 func PopulateNewBoard() {
-	board = [19][19]int{
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-	}
+	board = [19][19]int{}
 }
 
 func PrintBoard() {
@@ -99,6 +79,51 @@ func inSlice(a int, list []int) bool {
 func surrounded(board [19][19]int, i float64, j float64) int {
 	// var s []int
 	// if inSlice(int(i), s) == false {
+	// """Edge case for index i overflow player 1"""
+	if board[int(i/w)][int(j/h)] == 1 && int(i/w) == 18 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 1
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 0
+		}
+		return 1
+	}
+	// """Edge case for index i underflow player 1"""
+	if board[int(i/w)][int(j/h)] == 1 && int(i/w) == 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 1
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 0
+		}
+		return 1
+	}
+	// """Edge case for index j Overflow player 1"""
+	if board[int(i/w)][int(j/h)] == 1 && int(j/h) == 18 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 1
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 0
+		}
+		return 1
+	}
+	// """Edge case for index j underflow player 1"""
+	if board[int(i/w)][int(j/h)] == 1 && int(j/h) == 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 {
+			return 1
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 {
+			return 0
+		}
+		return 1
+	}
+
 	// if surrounded
 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 		// if surrounded by friends, good
@@ -122,6 +147,51 @@ func surrounded(board [19][19]int, i float64, j float64) int {
 		// }
 	}
 	// }
+	// """Edge case for index i Overflow player 2"""
+	if board[int(i/w)][int(j/h)] == 2 && int(i/w) == 18 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 2
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 0
+		}
+		return 2
+	}
+	// """Edge case for index i underflowflow player 2"""
+	if board[int(i/w)][int(j/h)] == 2 && int(i/w) == 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 2
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 0
+		}
+		return 2
+	}
+	// """Edge case for index j Overflowflowflow player 2"""
+	if board[int(i/w)][int(j/h)] == 2 && int(j/h) == 18 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			return 2
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			return 0
+		}
+		return 2
+	}
+	// """Edge case for index j underflowflow player 2"""
+	if board[int(i/w)][int(j/h)] == 2 && int(j/h) == 0 {
+		// if surrounded by friends, good
+		if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 {
+			return 2
+			// if surrounded by enemies, bad
+		} else if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 {
+			return 0
+		}
+		return 2
+	}
+
 	// if surrounded
 	if board[int(i/w)][int(j/h)] == 2 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 		// if surrounded by friends, good
