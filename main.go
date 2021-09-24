@@ -11,9 +11,9 @@ import (
 	// "github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-var square *ebiten.Image
+var square, hLine, vLine *ebiten.Image
 
-// var activeSquare *ebiten.Image
+// var line *ebiten.Image
 
 var board [19][19]int
 
@@ -142,7 +142,18 @@ func update(screen *ebiten.Image) error {
 	if square == nil {
 		square, _ = ebiten.NewImage(int(w), int(h), ebiten.FilterNearest)
 	}
+
+	if hLine == nil {
+		hLine, _ = ebiten.NewImage(int(w), 1, ebiten.FilterNearest)
+	}
+
+	if vLine == nil {
+		vLine, _ = ebiten.NewImage(1, int(h), ebiten.FilterNearest)
+	}
+
 	for i := float64(0); i < float64(screenWidth); i += w {
+		hLine.Fill(color.Black)
+		vLine.Fill(color.Black)
 		for j := float64(0); j < float64(screenHeight); j += h {
 			if board[int(i/w)][int(j/h)] == 1 {
 				square.Fill(color.NRGBA{0xff, 0x00, 0x00, 0xff})
@@ -195,15 +206,25 @@ func update(screen *ebiten.Image) error {
 				if y/int(h) == int(j/h) {
 					if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 						board[int(i/w)][int(j/h)] = playerTurn()
-						PrintBoard()
+						// PrintBoard()
 					}
 				}
 			}
 			opts := &ebiten.DrawImageOptions{}
 			opts.GeoM.Translate(i, j)
+
+			hLineOpts := &ebiten.DrawImageOptions{}
+			hLineOpts.GeoM.Translate(i, j+h/2)
+
+			vLineOpts := &ebiten.DrawImageOptions{}
+			vLineOpts.GeoM.Translate(i+w/2, j)
+
 			screen.DrawImage(square, opts)
+			screen.DrawImage(hLine, hLineOpts)
+			screen.DrawImage(vLine, vLineOpts)
 		}
 	}
+	PrintBoard()
 	// square.Fill(color.White)
 
 	// opts := &ebiten.DrawImageOptions{}
