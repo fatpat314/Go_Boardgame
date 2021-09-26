@@ -76,6 +76,8 @@ func inSlice(a int, list []int) bool {
 	return false
 }
 
+// Approach this as the 'number of islands question'
+
 func surrounded(board [19][19]int, i float64, j float64) int {
 	// var s []int
 	// if inSlice(int(i), s) == false {
