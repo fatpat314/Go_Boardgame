@@ -77,8 +77,70 @@ func inSlice(a int, list []int) bool {
 }
 
 // Approach this as the 'number of islands question'
+func numIslands(grid [19][19]int) int {
+	numOfIslands := 0
+	visited := make([][]bool, len(grid[0]))
+	var n [][]int
+	for row := range visited {
+		visited[row] = make([]bool, len(grid[0]))
+	}
 
-func surrounded(board [19][19]int, i float64, j float64) int {
+	for x := 0; x < len(grid); x++ {
+		for y := 0; y < len(grid[0]); y++ {
+			// if grid[x][y] == 0 {
+			// 	continue
+			// }
+			if grid[x][y] == 2 {
+				continue
+			}
+			if visited[x][y] {
+				continue
+			}
+			var s []int
+			s = append(s, x, y)
+			n = append(n, s)
+			islandDFS(grid, visited, x, y)
+			fmt.Println(n)
+			numOfIslands++
+			board[x][y] = 0
+		}
+	}
+
+	return numOfIslands
+}
+
+func islandDFS(grid [19][19]int, visited [][]bool, x, y int) {
+	if x < 0 || y < 0 || x >= len(grid) || y >= len(grid[0]) {
+		return
+	}
+	if visited[x][y] {
+		return
+	}
+	// if grid[x][y] == 0 {
+	// 	return
+	// }
+	if grid[x][y] == 2 {
+		return
+	}
+
+	visited[x][y] = true
+
+	for _, direction := range getDirections() {
+		dx, dy := direction[0], direction[1]
+		islandDFS(grid, visited, x+dx, y+dy)
+	}
+}
+
+func getDirections() [][]int {
+	return [][]int{
+		{-1, 0},
+		{1, 0},
+		{0, -1},
+		{0, 1},
+	}
+}
+
+func surrounded(board [19][19]int, i, j float64) int {
 	// var s []int
 	// if inSlice(int(i), s) == false {
 	// """Edge case for index i overflow player 1"""
@@ -146,7 +208,7 @@ func surrounded(board [19][19]int, i float64, j float64) int {
 			visited = append(visited, v)
 
 			s = append(s, m)
-			fmt.Println(s)
+			// fmt.Println(s)
 			// 	board[int(i/w)][int(j/h)] = 2
 			// 	return surrounded(board, i+1, j)
 			// 	// PrintBoard()
@@ -229,6 +291,8 @@ func update(screen *ebiten.Image) error {
 		vLine, _ = ebiten.NewImage(1, int(h), ebiten.FilterNearest)
 	}
 
+	fmt.Println("ISLANDS!:", numIslands(board))
+
 	for i := float64(0); i < float64(screenWidth); i += w {
 		hLine.Fill(color.Black)
 		vLine.Fill(color.Black)
@@ -240,6 +304,7 @@ func update(screen *ebiten.Image) error {
 			} else {
 				square.Fill(color.White)
 			}
+
 			if surrounded(board, i, j) == 0 {
 				// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 				// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
@@ -258,6 +323,7 @@ func update(screen *ebiten.Image) error {
 					board[int(i/w)][int(j/h)] = 1
 				}
 			}
+
 			// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 			// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
 			// 		board[int(i/w)][int(j/h)] = 1
@@ -302,7 +368,7 @@ func update(screen *ebiten.Image) error {
 			screen.DrawImage(vLine, vLineOpts)
 		}
 	}
-	PrintBoard()
+	// PrintBoard()
 	// square.Fill(color.White)
 
 	// opts := &ebiten.DrawImageOptions{}
