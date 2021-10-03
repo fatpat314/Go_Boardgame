@@ -80,7 +80,7 @@ func inSlice(a int, list []int) bool {
 func numIslands(grid [19][19]int) int {
 	numOfIslands := 0
 	visited := make([][]bool, len(grid[0]))
-	var n [][]int
+	// var n [][]int
 	for row := range visited {
 		visited[row] = make([]bool, len(grid[0]))
 	}
@@ -96,12 +96,15 @@ func numIslands(grid [19][19]int) int {
 			if visited[x][y] {
 				continue
 			}
-			var s []int
-			s = append(s, x, y)
-			n = append(n, s)
+			// var s []int
+			// s = append(s, x, y)
+			// n = append(n, s)
+			// fmt.Println(x, y)
+			// board[x][y] = 0
 			islandDFS(grid, visited, x, y)
-			fmt.Println(n)
+			// fmt.Println(x,y)
 			numOfIslands++
+			// fmt.Println(board[x][y])
 			board[x][y] = 0
 		}
 	}
@@ -305,24 +308,26 @@ func update(screen *ebiten.Image) error {
 				square.Fill(color.White)
 			}
 
-			if surrounded(board, i, j) == 0 {
-				// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
-				// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
-				// 		board[int(i/w)][int(j/h)] = 1
-				// 	} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
-				// 		board[int(i/w)][int(j/h)] = 0
-				// 	}
-				// }
-				board[int(i/w)][int(j/h)] = 0
-			} else if surrounded(board, i, j) == 1 {
-				board[int(i/w)][int(j/h)] = 1
-			} else if surrounded(board, i, j) == 2 {
-				board[int(i/w)][int(j/h)] = 2
-			} else if surrounded(board, i, j) == 3 {
-				if surrounded(board, i+1, j) == 1 {
-					board[int(i/w)][int(j/h)] = 1
-				}
-			}
+			// if surrounded(board, i, j) == 0 {
+			// 	// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
+			// 	// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
+			// 	// 		board[int(i/w)][int(j/h)] = 1
+			// 	// 	} else if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 2 && board[int(i/w)][int(j/h)+1] == 2 && board[int(i/w)-1][int(j/h)] == 2 && board[int(i/w)][int(j/h)-1] == 2 {
+			// 	// 		board[int(i/w)][int(j/h)] = 0
+			// 	// 	}
+			// 	// }
+			// 	board[int(i/w)][int(j/h)] = 0
+			// } else if surrounded(board, i, j) == 1 {
+			// 	board[int(i/w)][int(j/h)] = 1
+			// } else if surrounded(board, i, j) == 2 {
+			// 	board[int(i/w)][int(j/h)] = 2
+			// } else if surrounded(board, i, j) == 3 {
+			// 	if surrounded(board, i+1, j) == 1 {
+			// 		board[int(i/w)][int(j/h)] = 1
+			// 	}
+			// }
+
+			// //////////////////////////////////////////////////////
 
 			// if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] != 0 && board[int(i/w)][int(j/h)+1] != 0 && board[int(i/w)-1][int(j/h)] != 0 && board[int(i/w)][int(j/h)-1] != 0 {
 			// 	if board[int(i/w)][int(j/h)] == 1 && board[int(i/w)+1][int(j/h)] == 1 && board[int(i/w)][int(j/h)+1] == 1 && board[int(i/w)-1][int(j/h)] == 1 && board[int(i/w)][int(j/h)-1] == 1 {
