@@ -78,7 +78,7 @@ func inSlice(a int, list []int) bool {
 
 // Approach this as the 'number of islands question'
 func numIslands(grid [19][19]int) int {
-	numOfIslands := 0
+	numOfIslands := -1
 	visited := make([][]bool, len(grid[0]))
 	// var n [][]int
 	for row := range visited {
