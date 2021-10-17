@@ -231,6 +231,7 @@ func surrounded(board [19][19]int, i, j float64) int {
 		}
 		return 2
 	}
+
 	// """Edge case for index i underflowflow player 2"""
 	if board[int(i/w)][int(j/h)] == 2 && int(i/w) == 0 {
 		// if surrounded by friends, good
